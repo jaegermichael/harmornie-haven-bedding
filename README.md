@@ -16,4 +16,6 @@ Create a production build with `npm run build`.
 - Products and prices match the supplied images.
 - The range is limited to double and queen spring or compressed foam beds, in standard or pillowtop finishes.
 - The saved-beds panel is for browsing only. Online checkout is not connected.
+- Saved beds persist in the current browser; the panel keeps a single copy of each model.
+- The home collection can switch between spring and compressed foam models, and the finish preview links to the model shown.
 - Contact details and ordering information were not provided, so the site does not invent them.

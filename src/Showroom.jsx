@@ -1,0 +1,25 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { products, product, money } from './data'
+
+export const Arrow = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
+const Moon = () => <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><path d="M25 19A11 11 0 0 1 13 5a11 11 0 1 0 12 14Z" /><path d="M24 4v6m-3-3h6" /></svg>
+
+export function ProductCard({ item, add }) {
+  return <article className="product-card"><Link className="product-image" to={`/product/${item.id}`}><img loading="lazy" src={item.img} alt={item.name} /></Link><div className="product-info"><span>{item.size} · {item.finish}</span><h3><Link to={`/product/${item.id}`}>{item.name}</Link></h3><div className="product-bottom"><strong>{money(item.price)}</strong><button onClick={() => add(item)} aria-label={`Save ${item.name}`}>Save bed <span aria-hidden="true">+</span></button></div></div></article>
+}
+
+export default function Showroom({ add }) {
+  const [construction, setConstruction] = useState('Spring')
+  const [finish, setFinish] = useState('Pillowtop')
+  const featured = product('queen-spring-pillowtop')
+  const finishProduct = product(finish === 'Pillowtop' ? 'double-spring-pillowtop' : 'double-spring-standard')
+  return <>
+    <section className="hero" aria-labelledby="hero-title"><div className="hero-copy section-shell"><span className="eyebrow"><Moon /> MAKE YOURSELF AT HOME</span><h1 id="hero-title">Good days begin<br />with <em>better nights.</em></h1><p>Your room. Your rhythm. Your place to rest.<br className="desktop-break" /> Discover our double and queen bed collection.</p><Link className="button dark" to="/shop">Find your bed <Arrow /></Link><span className="hero-note">Spring & compressed foam · From {money(Math.min(...products.map((item) => item.price)))}</span></div></section>
+    <section className="showcase-band" aria-label="Featured bed"><div className="showcase-inner"><div className="showcase-photo"><img src={featured.img} alt={featured.name} width="1280" height="935" fetchPriority="high" /></div><div className="showcase-label" aria-hidden="true">A softer landing.</div><article className="showcase-card"><span className="eyebrow">IN THE SPOTLIGHT</span><h2>Room to unwind.</h2><p>Queen spring pillowtop bed</p><div className="showcase-price"><strong>{money(featured.price)}</strong><span>Queen · Pillowtop</span></div><Link to={`/product/${featured.id}`} className="text-link">Meet this bed <Arrow /></Link></article></div></section>
+    <div className="range-strip section-shell"><span>Thoughtfully simple choices.</span><p>Two sizes</p><i aria-hidden="true" /><p>Two constructions</p><i aria-hidden="true" /><p>Your kind of comfort</p></div>
+    <section className="collection section-shell"><div className="section-heading"><div><span className="eyebrow">THE COLLECTION</span><h2>Find your everyday<br /><em>kind of comfort.</em></h2></div><div className="collection-heading-aside"><p>Real beds, photographed as they are.<br />Explore the details. Find your favourite.</p><Link className="text-link" to="/shop">View all eight beds <Arrow /></Link></div></div><div className="collection-filter" role="group" aria-label="Choose bed construction">{['Spring', 'Compressed foam'].map((type) => <button key={type} aria-pressed={construction === type} onClick={() => setConstruction(type)}>{type} beds <span>04</span></button>)}</div><div className="product-grid">{products.filter((item) => item.construction === construction).map((item) => <ProductCard key={item.id} item={item} add={add} />)}</div></section>
+    <section className="finish-section"><div className="feature section-shell"><div className="feature-photo"><img src={finishProduct.img} alt={finishProduct.name} loading="lazy" /><div className="photo-caption">{finishProduct.name}<strong>{money(finishProduct.price)}</strong></div></div><div className="feature-copy"><span className="eyebrow">THE FINISHING TOUCH</span><h2>A little detail.<br /><em>A different feel.</em></h2><p>Keep it simple with a standard finish, or explore the extra top layer of a pillowtop. Take a closer look at both.</p><div className="finish-options" role="group" aria-label="Preview bed finish">{['Standard', 'Pillowtop'].map((value) => <button key={value} aria-pressed={finish === value} onClick={() => setFinish(value)}>{value}</button>)}</div><p className="finish-description" aria-live="polite">Showing: {finishProduct.name} · {money(finishProduct.price)}</p><Link className="text-link" to={`/product/${finishProduct.id}`}>Explore this bed <Arrow /></Link></div></div></section>
+    <section className="last-cta section-shell"><Moon /><span className="eyebrow">HARMORNIE HAVEN · EST. 2021</span><h2>Make room<br />for <em>rest.</em></h2><p>Eight beds. One place to find yours.</p><Link className="button dark" to="/shop">Explore the collection <Arrow /></Link></section>
+  </>
+}
